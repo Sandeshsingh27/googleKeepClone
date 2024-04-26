@@ -31,3 +31,14 @@ export function addNote(note) {
         throw error; // Re-throw the error to handle it further up the call stack if needed
     });
 }
+
+export function permanentDeleteNote(id) {
+    return axios.delete('http://127.0.0.1:8000/Note/'+id+'/')
+    .then(res => {
+        return res.data; // Return the data from the axios response
+    })
+    .catch(error => {
+        console.error("Error fetching notes:", error);
+        throw error; // Re-throw the error to handle it further up the call stack if needed
+    });
+}

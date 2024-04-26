@@ -4,6 +4,7 @@ import { Card, CardContent, CardActions, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { RestoreFromTrashOutlined as Restore, DeleteForeverOutlined as Delete } from '@mui/icons-material';
 import { DataContext } from '../../context/DataProvider';
+import { permanentDeleteNote } from '../../services/ApiService';
 
 const StyledCard = styled(Card)`
     border: 1px solid #e0e0e0;
@@ -15,7 +16,7 @@ const StyledCard = styled(Card)`
 
 const DeleteNote = ({ deleteNote }) => {
 
-    const { deleteNotes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
+    const { deleteNotes, setNotes, setArchiveNotes, setDeleteNotes } = useContext(DataContext);
 
     const restoreNote = (deleteNote) => {
         const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
@@ -24,8 +25,11 @@ const DeleteNote = ({ deleteNote }) => {
     }
 
     const removeNote = (deleteNote) => {
-        const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
-        setDeleteNotes(updatedNotes);
+        permanentDeleteNote(deleteNote.note_id)
+        .then(res => {
+            const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
+            setDeleteNotes(updatedNotes);
+        })
     }
 
     return (

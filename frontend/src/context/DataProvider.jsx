@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import {getNote, addNote} from '../services/ApiService';
+import {getNote, addNote, deleteNote} from '../services/ApiService';
 
 export const DataContext = createContext(null);
 
@@ -21,6 +21,32 @@ const DataProvider = ({ children }) => {
             mount = false; // Cleanup logic here if needed
         };
     }, []);
+
+    // useEffect(() => {
+    //     let mount = true;
+    //     addNote()
+    //     .then(res =>{
+    //         console.log("res from api",res);
+    //         setNotes(res);
+    //     });
+
+    //     return () => {
+    //         mount = false; // Cleanup logic here if needed
+    //     };
+    // }, []);
+
+    // useEffect(() => {
+    //     let mount = true;
+    //     deleteNote()
+    //     .then(res =>{
+    //         console.log("res from api",res);
+    //         setNotes(res);
+    //     });
+
+    //     return () => {
+    //         mount = false; // Cleanup logic here if needed
+    //     };
+    // }, []);
 
     return (
         <DataContext.Provider value={{
