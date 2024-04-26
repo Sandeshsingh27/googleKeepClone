@@ -18,21 +18,21 @@ const DeleteNote = ({ deleteNote }) => {
     const { deleteNotes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
 
     const restoreNote = (deleteNote) => {
-        const updatedNotes = deleteNotes.filter(data => data.id !== deleteNote.id);
+        const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
         setDeleteNotes(updatedNotes);
         setNotes(prevArr => [deleteNote, ...prevArr]);
     }
 
     const removeNote = (deleteNote) => {
-        const updatedNotes = deleteNotes.filter(data => data.id !== deleteNote.id);
+        const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
         setDeleteNotes(updatedNotes);
     }
 
     return (
         <StyledCard>
                 <CardContent>
-                    <Typography>{deleteNote.heading}</Typography>
-                    <Typography>{deleteNote.text}</Typography>
+                    <Typography>{deleteNote.title}</Typography>
+                    <Typography>{deleteNote.body}</Typography>
                 </CardContent>
                 <CardActions>
                     <Delete 

@@ -43,7 +43,7 @@ const Notes = () => {
                                 >
                                 {
                                     notes.map((note, index) => (
-                                        <Draggable key={note.id} draggableId={note.id} index={index}>
+                                        <Draggable key={note.note_id.toString()} draggableId={note.note_id.toString()} index={index}>
                                             {(provided, snapshot) => (
                                                 <Grid ref={provided.innerRef}
                                                     {...provided.draggableProps}

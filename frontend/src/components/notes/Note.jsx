@@ -14,18 +14,21 @@ const StyledCard = styled(Card)`
     box-shadow: none;
 `
 
-const Note = ({ note }) => {
+// const [note]
 
+const Note = ({ note }) => {
+    // console.log("note:-", note)
     const { notes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
 
     const archiveNote = (note) => {
-        const updatedNotes = notes.filter(data => data.id !== note.id);
+        // console.log(note.note_id)
+        const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
         setNotes(updatedNotes);
         setAcrchiveNotes(prevArr => [note, ...prevArr]);
     }
 
     const deleteNote = (note) => {
-        const updatedNotes = notes.filter(data => data.id !== note.id);
+        const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
         setNotes(updatedNotes);
         setDeleteNotes(prevArr => [note, ...prevArr]);
     }
@@ -33,8 +36,8 @@ const Note = ({ note }) => {
     return (
         <StyledCard>
                 <CardContent>
-                    <Typography>{note.heading}</Typography>
-                    <Typography>{note.text}</Typography>
+                    <Typography>{note.title}</Typography>
+                    <Typography>{note.body}</Typography>
                 </CardContent>
                 <CardActions>
                     <Archive 

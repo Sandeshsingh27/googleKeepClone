@@ -19,13 +19,13 @@ const Archive = ({ archive }) => {
     const { archiveNotes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
 
     const unArchiveNote = (archive) => {
-        const updatedNotes = archiveNotes.filter(data => data.id !== archive.id);
+        const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
         setAcrchiveNotes(updatedNotes);
         setNotes(prevArr => [archive, ...prevArr]);
     }
 
     const deleteNote = (archive) => {
-        const updatedNotes = archiveNotes.filter(data => data.id !== archive.id);
+        const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
         setAcrchiveNotes(updatedNotes);
         setDeleteNotes(prevArr => [archive, ...prevArr]);
     }
@@ -33,8 +33,8 @@ const Archive = ({ archive }) => {
     return (
         <StyledCard>
                 <CardContent>
-                    <Typography>{archive.heading}</Typography>
-                    <Typography>{archive.text}</Typography>
+                    <Typography>{archive.title}</Typography>
+                    <Typography>{archive.body}</Typography>
                 </CardContent>
                 <CardActions>
                     <Unarchive 
