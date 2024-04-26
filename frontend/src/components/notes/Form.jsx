@@ -1,10 +1,10 @@
+// Form.jsx
 import { useState, useRef, useContext } from 'react';
-
 import { Box, TextField, ClickAwayListener } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { v4 as uuid } from 'uuid';
-
 import { DataContext } from '../../context/DataProvider';
+import { addNote } from '../../services/ApiService';
 
 const Container = styled(Box)`
     display: flex;
@@ -16,57 +16,58 @@ const Container = styled(Box)`
     border-radius: 8px;
     min-height: 30px;
     padding: 10px 15px;
-`
-
-const note = {
-    id: '',
-    heading: '',
-    text: ''
-}
+`;
 
 const Form = () => {
-
     const [showTextField, setShowTextField] = useState(false);
-    const [addNote, setAddNote] = useState({ ...note, id: uuid() });
-
+    const [noteData, setNoteData] = useState({ title: '', body: '' });
     const { setNotes } = useContext(DataContext);
-    
     const containerRef = useRef();
 
     const handleClickAway = () => {
         setShowTextField(false);
-        containerRef.current.style.minheight = '30px'
-        setAddNote({ ...note, id: uuid() });
+        containerRef.current.style.minHeight = '30px';
 
-        if (addNote.heading || addNote.text) {
-            setNotes(prevArr => [addNote, ...prevArr])
+        console.log(noteData)
+
+        // Add the new note
+        if (noteData.title.trim() || noteData.body.trim()) {
+            addNote(noteData)
+                .then(newNote => {
+                    setNotes(prevNotes => [newNote, ...prevNotes]);
+                    setNoteData({ title: '', body: '' });
+                })
+                .catch(error => {
+                    console.error('Error adding note:', error);
+                });
         }
-    }
-    
+    };
+
     const onTextAreaClick = () => {
         setShowTextField(true);
-        containerRef.current.style.minheight = '70px'
-    }
+        containerRef.current.style.minHeight = '70px';
+    };
 
-    const onTextChange = (e) => {
-        let changedNote = { ...addNote, [e.target.name]: e.target.value };
-        setAddNote(changedNote);
-    }
+    const onTextChange = e => {
+        const { name, value } = e.target;
+        console.log("name and value:-", name, value)
+        setNoteData(prevData => ({ ...prevData, [name]: value }));
+    };
 
     return (
         <ClickAwayListener onClickAway={handleClickAway}>
             <Container ref={containerRef}>
-                {   showTextField && 
-                    <TextField 
+                {showTextField && (
+                    <TextField
                         placeholder="Title"
                         variant="standard"
                         InputProps={{ disableUnderline: true }}
                         style={{ marginBottom: 10 }}
-                        onChange={(e) => onTextChange(e)}
-                        name='heading'
-                        value={addNote.heading}
+                        onChange={onTextChange}
+                        name="title"
+                        value={noteData.title}
                     />
-                }
+                )}
                 <TextField
                     placeholder="Take a note..."
                     multiline
@@ -74,13 +75,13 @@ const Form = () => {
                     variant="standard"
                     InputProps={{ disableUnderline: true }}
                     onClick={onTextAreaClick}
-                    onChange={(e) => onTextChange(e)}
-                    name='text'
-                    value={addNote.text}
+                    onChange={onTextChange}
+                    name="body"
+                    value={noteData.body}
                 />
             </Container>
         </ClickAwayListener>
-    )
-}
+    );
+};
 
 export default Form;

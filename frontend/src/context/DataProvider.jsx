@@ -1,12 +1,12 @@
 import { createContext, useEffect, useState } from 'react';
-import {getNote} from '../services/ApiService';
+import {getNote, addNote} from '../services/ApiService';
 
 export const DataContext = createContext(null);
 
 const DataProvider = ({ children }) => {
 
     const [notes, setNotes] = useState([]);
-    const [archiveNotes, setAcrchiveNotes] = useState([]);
+    const [archiveNotes, setArchiveNotes] = useState([]);
     const [deleteNotes, setDeleteNotes] = useState([]);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ const DataProvider = ({ children }) => {
             notes,
             setNotes,
             archiveNotes,
-            setAcrchiveNotes,
+            setArchiveNotes,
             deleteNotes,
             setDeleteNotes
         }}
