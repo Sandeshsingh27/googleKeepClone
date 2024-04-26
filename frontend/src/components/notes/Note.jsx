@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { Card, CardContent, CardActions, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ArchiveOutlined as Archive, DeleteOutlineOutlined as Delete } from '@mui/icons-material';
+import { ArchiveOutlined as Archive, DeleteOutlineOutlined as Delete, PinOutlined as Pin } from '@mui/icons-material';
 
 import { DataContext } from '../../context/DataProvider';
 
@@ -20,6 +20,12 @@ const Note = ({ note }) => {
     // console.log("note:-", note)
     const { notes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
 
+    // Filter pinned notes
+    const pinnedNotes = notes.filter(note => note.isPinned);
+    
+    // Filter non-pinned notes
+    const otherNotes = notes.filter(note => !note.isPinned);
+
     const archiveNote = (note) => {
         // console.log(note.note_id)
         const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
@@ -32,6 +38,17 @@ const Note = ({ note }) => {
         setNotes(updatedNotes);
         setDeleteNotes(prevArr => [note, ...prevArr]);
     }
+
+    const togglePin = (note) => {
+        const updatedNotes = notes.map(data => {
+            if (data.note_id === note.note_id) {
+                return { ...data, isPinned: !data.isPinned };
+            }
+            return data;
+        });
+        setNotes(updatedNotes);
+    }
+
 
     return (
         <StyledCard>
@@ -48,6 +65,11 @@ const Note = ({ note }) => {
                     <Delete 
                         fontSize="small"
                         onClick={() => deleteNote(note)}
+                    />
+                    <Pin
+                        fontSize="small"
+                        onClick={() => togglePin(note)}
+                        color={note.isPinned ? "primary" : "action"}
                     />
                 </CardActions>
         </StyledCard>

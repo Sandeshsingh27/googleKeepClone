@@ -28,7 +28,7 @@ const Form = () => {
         setShowTextField(false);
         containerRef.current.style.minHeight = '30px';
 
-        console.log(noteData)
+        console.log("noteData:", noteData);
 
         // Add the new note
         if (noteData.title.trim() || noteData.body.trim()) {
@@ -50,7 +50,7 @@ const Form = () => {
 
     const onTextChange = e => {
         const { name, value } = e.target;
-        console.log("name and value:-", name, value)
+        // console.log("name and value:-", name, value)
         setNoteData(prevData => ({ ...prevData, [name]: value }));
     };
 
