@@ -74,7 +74,6 @@ const Notes = () => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                         item
-                                                        xs={6} md={3}
                                                     >
                                                         <Note note={note} />
                                                     </Grid>
@@ -119,7 +118,6 @@ const Notes = () => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                         item
-                                                        xs={6} md={3}
                                                     >
                                                         <Note note={note} />
                                                     </Grid>
