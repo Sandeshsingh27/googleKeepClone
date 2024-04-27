@@ -10,6 +10,8 @@ class Note(models.Model):
     isPinned = models.BooleanField(default=False)
     isArchive = models.BooleanField(default=False)
     isTrash = models.BooleanField(default=False)
+    bg_img = models.ImageField(upload_to='media/', null=True, blank=True)
+    bg_color = models.CharField(max_length=10, default="#fff")
 
     def __str__(self):
         return self.body[0:50]
