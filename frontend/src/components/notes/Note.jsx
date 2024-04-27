@@ -23,6 +23,11 @@ const PinIcon = styled(PushPin)`
     cursor: pointer;
 `;
 
+const TitleTypography = styled(Typography)`
+    font-weight: bold;
+    font-size: 14px; /* Adjust the font size as needed */
+`;
+
 const Note = ({ note }) => {
     const { notes, setNotes, setArchiveNotes, setTrashNotes } = useContext(DataContext);
 
@@ -85,20 +90,20 @@ const Note = ({ note }) => {
         <Grid item xs={12} sm={12} md={6} lg={3}>
             <StyledCard>
                 <CardContent>
-                    <Typography>{note.title}</Typography>
+                    <TitleTypography>{note.title}</TitleTypography>
                     <Typography>{note.body}</Typography>
                 </CardContent>
                 <CardActions>
-                    <PinIcon
-                        fontSize="small"
-                        onClick={() => togglePin(note)}
-                        color={note.isPinned ? "primary" : "action"}
-                        title={note.isPinned ? "Unpin" : "Pin"} // Hover text based on pinning state
-                    />
-                    <div title="Archive" onClick={() => archiveNote(note)}>
+                    <div title={note.isPinned ? "Unpin note" : "Pin note"}  onClick={() => togglePin(note)}>
+                        <PinIcon
+                            fontSize="small"
+                            color={note.isPinned ? "#000000" : "action"}
+                        />
+                    </div>
+                    <div title="Archive note" onClick={() => archiveNote(note)}>
                         <Archive fontSize="small" style={{ cursor: 'pointer' }} />
                     </div>
-                    <div title="Delete" onClick={() => trashNote(note)}>
+                    <div title="Delete note" onClick={() => trashNote(note)}>
                         <Delete fontSize="small" style={{ cursor: 'pointer' }} />
                     </div>
                 </CardActions>

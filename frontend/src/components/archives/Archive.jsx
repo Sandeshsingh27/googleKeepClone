@@ -13,7 +13,12 @@ const StyledCard = styled(Card)`
     width: 240px;
     margin: 8px;
     box-shadow: none;
-`
+`;
+
+const TitleTypography = styled(Typography)`
+    font-weight: bold;
+    font-size: 16px; /* Adjust the font size as needed */
+`;
 
 const Archive = ({ archive }) => {
 
@@ -57,7 +62,7 @@ const Archive = ({ archive }) => {
     return (
         <StyledCard>
                 <CardContent>
-                    <Typography>{archive.title}</Typography>
+                    <TitleTypography>{archive.title}</TitleTypography>
                     <Typography>{archive.body}</Typography>
                 </CardContent>
                 <CardActions>
