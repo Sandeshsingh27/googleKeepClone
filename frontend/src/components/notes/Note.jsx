@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from "axios";
-
-import { Card, CardContent, CardActions, Typography, Grid } from '@mui/material';
+import { Card, CardContent, CardActions, Typography, Grid, IconButton, Popover, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { ArchiveOutlined as Archive, DeleteOutlineOutlined as Delete, PushPinOutlined as PushPin } from '@mui/icons-material'; // Changed the Pin icon to PushPin
-
+import { ArchiveOutlined as Archive, DeleteOutlineOutlined as Delete, PushPinOutlined as PushPin, PhotoCamera } from '@mui/icons-material';
 import { DataContext } from '../../context/DataProvider';
+import { ChromePicker } from 'react-color';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 
 const StyledCard = styled(Card)`
     border: 1px solid #e0e0e0;
@@ -13,23 +13,70 @@ const StyledCard = styled(Card)`
     width: 240px;
     margin: 8px;
     box-shadow: none;
-    position: relative; /* Added to position the pin icon */
+    position: relative;
+    overflow: hidden;
 `;
 
-const PinIcon = styled(PushPin)`
+const PinIconButton = styled(IconButton)`
     position: absolute;
     top: 8px;
     right: 8px;
-    cursor: pointer;
 `;
 
 const TitleTypography = styled(Typography)`
     font-weight: bold;
-    font-size: 14px; /* Adjust the font size as needed */
+    font-size: 14px;
 `;
 
 const Note = ({ note }) => {
     const { notes, setNotes, setArchiveNotes, setTrashNotes } = useContext(DataContext);
+    const [colorPickerAnchorEl, setColorPickerAnchorEl] = useState(null);
+    const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+
+    useEffect(() => {
+        const savedColor = localStorage.getItem(`note_${note.note_id}_color`);
+        if (savedColor) {
+            setBackgroundColor(savedColor);
+        }
+    }, [note.note_id]);
+
+    const handleColorChange = (color) => {
+        setBackgroundColor(color.hex);
+        // Save the color to local storage
+        localStorage.setItem(`note_${note.note_id}_color`, color.hex);
+        // Call a function to save the color to the database
+        saveColorToDatabase(color.hex);
+    };
+
+    const handleColorPickerOpen = (event) => {
+        setColorPickerAnchorEl(event.currentTarget);
+    };
+
+    const handleColorPickerClose = () => {
+        setColorPickerAnchorEl(null);
+    };
+
+    const saveColorToDatabase = async (color) => {
+        const data = {
+            ...note,
+            bg_color: color // Assuming 'backgroundColor' is the field name in the database
+        };
+
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/Note/${note.note_id}/`, data);
+            console.log('Color updated successfully:', response.data);
+            // Update the state with the new color
+            const updatedNotes = notes.map(data => {
+                if (data.note_id === note.note_id) {
+                    return { ...data, backgroundColor: color };
+                }
+                return data;
+            });
+            setNotes(updatedNotes);
+        } catch (error) {
+            console.error('Error updating color:', error);
+        }
+    };
 
     const archiveNote = (note) => {
         const data = {
@@ -47,7 +94,6 @@ const Note = ({ note }) => {
                 console.error('Error archiving note:', error);
             });
     };
-    
 
     const trashNote = (note) => {
         const data = {
@@ -65,7 +111,6 @@ const Note = ({ note }) => {
                 console.error('Error trashing note:', error);
             });
     };
-    
 
     const togglePin = (note) => {
         const updatedNote = { ...note, isPinned: !note.isPinned };
@@ -85,26 +130,58 @@ const Note = ({ note }) => {
             });
     };
 
-
     return (
         <Grid item xs={12} sm={12} md={6} lg={3}>
-            <StyledCard>
+            <StyledCard style={{ backgroundColor: backgroundColor }}>
                 <CardContent>
                     <TitleTypography>{note.title}</TitleTypography>
                     <Typography>{note.body}</Typography>
                 </CardContent>
                 <CardActions>
-                    <div title={note.isPinned ? "Unpin note" : "Pin note"}  onClick={() => togglePin(note)}>
-                        <PinIcon
-                            fontSize="small"
-                            color={note.isPinned ? "#000000" : "action"}
-                        />
-                    </div>
+                    <PinIconButton
+                        onClick={() => togglePin(note)}
+                        aria-label={note.isPinned ? "Unpin note" : "Pin note"}
+                        title={note.isPinned ? "Unpin note" : "Pin note"}
+                    >
+                        <PushPin style={{ color: note.isPinned ? "#000000" : "inherit" }} />
+                    </PinIconButton>
+
                     <div title="Archive note" onClick={() => archiveNote(note)}>
-                        <Archive fontSize="small" style={{ cursor: 'pointer' }} />
+                        <IconButton style={{ color: 'inherit' }} aria-label="Archive note">
+                            <Archive />
+                        </IconButton>
+                    </div>
+                    <div>
+                        <IconButton
+                            title="Change background color"
+                            style={{ color: 'inherit' }}
+                            aria-label="Change background color"
+                            onClick={handleColorPickerOpen}
+                        >
+                            <ColorLensIcon />
+                        </IconButton>
+                        <Popover
+                            open={Boolean(colorPickerAnchorEl)}
+                            anchorEl={colorPickerAnchorEl}
+                            onClose={handleColorPickerClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                        >
+                            <Box p={2}>
+                                <ChromePicker color={backgroundColor} onChange={handleColorChange} />
+                            </Box>
+                        </Popover>
                     </div>
                     <div title="Delete note" onClick={() => trashNote(note)}>
-                        <Delete fontSize="small" style={{ cursor: 'pointer' }} />
+                        <IconButton style={{ color: 'inherit' }} aria-label="Move to trash">
+                            <Delete />
+                        </IconButton>
                     </div>
                 </CardActions>
             </StyledCard>
