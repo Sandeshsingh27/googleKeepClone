@@ -9,6 +9,7 @@ class Note(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     isPinned = models.BooleanField(default=False)
     isArchive = models.BooleanField(default=False)
+    isTrash = models.BooleanField(default=False)
 
     def __str__(self):
         return self.body[0:50]

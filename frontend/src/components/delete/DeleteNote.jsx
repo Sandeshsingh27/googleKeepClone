@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import axios from 'axios';
 
 import { Card, CardContent, CardActions, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -16,19 +17,31 @@ const StyledCard = styled(Card)`
 
 const DeleteNote = ({ deleteNote }) => {
 
-    const { deleteNotes, setNotes, setArchiveNotes, setDeleteNotes } = useContext(DataContext);
+    const { trashNotes, setNotes, setTrashNotes } = useContext(DataContext);
 
     const restoreNote = (deleteNote) => {
-        const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
-        setDeleteNotes(updatedNotes);
-        setNotes(prevArr => [deleteNote, ...prevArr]);
+        const data = {
+            ...deleteNote,
+            isTrash: false  // Set isArchive to false to indicate unarchiving
+        };
+    
+        axios.put(`http://127.0.0.1:8000/Note/${deleteNote.note_id}/`, data)
+            .then(response => {
+                // If the request is successful, update the local state
+                const updatedNotes = trashNotes.filter(data => data.note_id !== deleteNote.note_id);
+                setTrashNotes(updatedNotes);
+                setNotes(prevNotes => [deleteNote, ...prevNotes]); // Add the restored note to the notes list
+            })
+            .catch(error => {
+                console.error('Error unarchiving note:', error);
+            });
     }
 
     const removeNote = (deleteNote) => {
         permanentDeleteNote(deleteNote.note_id)
         .then(res => {
-            const updatedNotes = deleteNotes.filter(data => data.note_id !== deleteNote.note_id);
-            setDeleteNotes(updatedNotes);
+            const updatedNotes = trashNotes.filter(data => data.note_id !== deleteNote.note_id);
+            setTrashNotes(updatedNotes);
         })
     }
 

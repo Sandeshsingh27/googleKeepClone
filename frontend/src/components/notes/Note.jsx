@@ -15,33 +15,48 @@ const StyledCard = styled(Card)`
     box-shadow: none;
 `
 
-// const [note]
-
 const Note = ({ note }) => {
-    // console.log("note:-", note)
-    const { notes, setNotes, setArchiveNotes, setDeleteNotes } = useContext(DataContext);
-
-    // // Filter pinned notes
-    // const pinnedNotes = notes.filter(note => note.isPinned);
-    
-    // // Filter non-pinned notes
-    // const otherNotes = notes.filter(note => !note.isPinned);
+    const { notes, setNotes, setArchiveNotes, setTrashNotes } = useContext(DataContext);
 
     const archiveNote = (note) => {
-        // console.log(note.note_id)
-        const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
-        setNotes(updatedNotes);
-        setArchiveNotes(prevArr => [note, ...prevArr]);
-    }
+        const data = {
+            ...note,
+            isArchive: true
+        };
+    
+        axios.put(`http://127.0.0.1:8000/Note/${note.note_id}/`, data)
+            .then(response => {
+                const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
+                setNotes(updatedNotes);
+                setArchiveNotes(prevArr => [note, ...prevArr]);
+            })
+            .catch(error => {
+                console.error('Error archiving note:', error);
+            });
+    };
+    
 
-    const deleteNote = (note) => {
-        const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
-        setNotes(updatedNotes);
-        setDeleteNotes(prevArr => [note, ...prevArr]);
-    }
+    const trashNote = (note) => {
+        const data = {
+            ...note,
+            isTrash: true // Set isTrash to true when trashing the note
+        };
+
+        console.log("data:",data)
+    
+        axios.put(`http://127.0.0.1:8000/Note/${note.note_id}/`, data)
+            .then(response => {
+                const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
+                setNotes(updatedNotes);
+                setTrashNotes(prevArr => [note, ...prevArr]);
+            })
+            .catch(error => {
+                console.error('Error trashing note:', error);
+            });
+    };
+    
 
     const togglePin = (note) => {
-        // Toggle the isPinned field
         const updatedNote = { ...note, isPinned: !note.isPinned };
         const updatedNotes = notes.map(data => {
             if (data.note_id === note.note_id) {
@@ -50,10 +65,8 @@ const Note = ({ note }) => {
             return data;
         });
 
-        // Update the note in the database
         axios.put(`http://127.0.0.1:8000/Note/${note.note_id}/`, updatedNote)
             .then(response => {
-                // Update the state with the updated note
                 setNotes(updatedNotes);
             })
             .catch(error => {
@@ -76,7 +89,7 @@ const Note = ({ note }) => {
                     />
                     <Delete 
                         fontSize="small"
-                        onClick={() => deleteNote(note)}
+                        onClick={() => trashNote(note)}
                     />
                     <Pin
                         fontSize="small"

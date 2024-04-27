@@ -50,7 +50,7 @@ const Notes = () => {
                 <Form onPinToggle={handlePinToggle} />
                 {pinnedNotes.length > 0 && (
                     <>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="p" gutterBottom>
                             Pinned
                         </Typography>
                         <DragDropContext onDragEnd={onDragEnd}>
@@ -74,6 +74,7 @@ const Notes = () => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                         item
+                                                        xs={6} md={3}
                                                     >
                                                         <Note note={note} />
                                                     </Grid>
@@ -84,13 +85,19 @@ const Notes = () => {
                                 )}
                             </Droppable>
                         </DragDropContext>
+                        {/* Render "Other" text when there are pinned notes */}
+                        <Box sx={{ marginTop: 2 }}>
+                            <Typography variant="p" gutterBottom>
+                                Other
+                            </Typography>
+                        </Box>
                     </>
                 )}
                 {unpinnedNotes.length > 0 && (
                     <>
-                        <Typography variant="h6" gutterBottom>
+                        {/* <Typography variant="p" gutterBottom>
                             Other
-                        </Typography>
+                        </Typography> */}
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable droppableId="unpinned-droppable">
                                 {(provided, snapshot) => (
@@ -112,6 +119,7 @@ const Notes = () => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                         item
+                                                        xs={6} md={3}
                                                     >
                                                         <Note note={note} />
                                                     </Grid>

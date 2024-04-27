@@ -2,7 +2,7 @@
 import { useState, useRef, useContext } from 'react';
 import { Box, TextField, ClickAwayListener } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { DataContext } from '../../context/DataProvider';
 import { addNote } from '../../services/ApiService';
 

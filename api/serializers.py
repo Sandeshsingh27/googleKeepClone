@@ -4,4 +4,4 @@ from .models import *
 class NoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Note
-        fields = ['note_id', 'title', 'body', 'updated', 'created', 'isPinned', 'isArchive']
+        fields = ['note_id', 'title', 'body', 'updated', 'created', 'isPinned', 'isArchive', 'isTrash']

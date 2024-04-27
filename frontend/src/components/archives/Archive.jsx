@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import axios from 'axios';
 
 import { Card, CardContent, CardActions, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -16,19 +17,42 @@ const StyledCard = styled(Card)`
 
 const Archive = ({ archive }) => {
 
-    const { archiveNotes, setNotes, setArchiveNotes, setDeleteNotes } = useContext(DataContext);
+    const { archiveNotes, setNotes, setArchiveNotes, setTrashNotes } = useContext(DataContext);
 
     const unArchiveNote = (archive) => {
-        const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
-        setArchiveNotes(updatedNotes);
-        setNotes(prevArr => [archive, ...prevArr]);
-    }
+        const data = {
+            ...archive,
+            isArchive: false  // Set isArchive to false to indicate unarchiving
+        };
+    
+        axios.put(`http://127.0.0.1:8000/Note/${archive.note_id}/`, data)
+            .then(response => {
+                // If the request is successful, update the local state
+                const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
+                setArchiveNotes(updatedNotes);
+                setNotes(prevNotes => [archive, ...prevNotes]); // Add the unarchived note to the notes list
+            })
+            .catch(error => {
+                console.error('Error unarchiving note:', error);
+            });
+    };
 
-    const deleteNote = (archive) => {
-        const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
-        setArchiveNotes(updatedNotes);
-        setDeleteNotes(prevArr => [archive, ...prevArr]);
-    }
+    const trashNote = () => {
+        const data = {
+            ...archive,
+            isArchive: false,
+            isTrash: true
+        };
+        axios.put(`http://127.0.0.1:8000/Note/${archive.note_id}/`, data)
+            .then(response => {
+                const updatedNotes = archiveNotes.filter(data => data.note_id !== archive.note_id);
+                setArchiveNotes(updatedNotes);
+                setTrashNotes(prevArr => [archive, ...prevArr]);
+            })
+            .catch(error => {
+                console.error('Error trashing note:', error);
+            });
+    };
 
     return (
         <StyledCard>
@@ -44,7 +68,7 @@ const Archive = ({ archive }) => {
                     />
                     <Delete 
                         fontSize="small"
-                        onClick={() => deleteNote(archive)}
+                        onClick={() => trashNote(archive)}
                     />
                 </CardActions>
         </StyledCard>
