@@ -1,3 +1,5 @@
+// Note.jsx
+
 import React, { useContext, useState, useEffect } from 'react';
 import axios from "axios";
 import { Card, CardContent, CardActions, Typography, Grid, IconButton, Popover, Box } from '@mui/material';
@@ -31,7 +33,7 @@ const TitleTypography = styled(Typography)`
 const Note = ({ note }) => {
     const { notes, setNotes, setArchiveNotes, setTrashNotes } = useContext(DataContext);
     const [colorPickerAnchorEl, setColorPickerAnchorEl] = useState(null);
-    const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
+    const [backgroundColor, setBackgroundColor] = useState(note.bg_color || '#FFFFFF'); // Set initial color from note data
 
     useEffect(() => {
         const savedColor = localStorage.getItem(`note_${note.note_id}_color`);
@@ -40,7 +42,7 @@ const Note = ({ note }) => {
         }
     }, [note.note_id]);
 
-    const handleColorChange = (color) => {
+    const handleColorChange = async (color) => {
         setBackgroundColor(color.hex);
         // Save the color to local storage
         localStorage.setItem(`note_${note.note_id}_color`, color.hex);
@@ -59,7 +61,7 @@ const Note = ({ note }) => {
     const saveColorToDatabase = async (color) => {
         const data = {
             ...note,
-            bg_color: color // Assuming 'backgroundColor' is the field name in the database
+            bg_color: color // Assuming 'bg_color' is the field name in the database
         };
 
         try {
@@ -68,7 +70,7 @@ const Note = ({ note }) => {
             // Update the state with the new color
             const updatedNotes = notes.map(data => {
                 if (data.note_id === note.note_id) {
-                    return { ...data, backgroundColor: color };
+                    return { ...data, bg_color: color };
                 }
                 return data;
             });

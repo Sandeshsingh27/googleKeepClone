@@ -15,7 +15,7 @@ export function getNote() {
 }
 
 export function addNote(note) {
-    const { title, body, isPinned, created, updated, note_id } = note;
+    const { title, body, isPinned, created, updated, note_id, bg_color } = note;
     
     // Set a default title if title is missing
     const defaultTitle = body.substring(0, 15); // Use first 15 characters of body as title
@@ -30,11 +30,12 @@ export function addNote(note) {
     return axios.post('http://127.0.0.1:8000/Note/', {
         title: noteTitle,
         body: body,
-        isPinned: false,
+        isPinned: isPinned,
         note_id: note_id,
         updated: updated,
         created: created,
-        isArchive: false
+        isArchive: false,
+        bg_color: bg_color
     })
     .then(res => {
         return res.data;
