@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import axios from "axios"
 
 import { Card, CardContent, CardActions, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -18,19 +19,19 @@ const StyledCard = styled(Card)`
 
 const Note = ({ note }) => {
     // console.log("note:-", note)
-    const { notes, setNotes, setAcrchiveNotes, setDeleteNotes } = useContext(DataContext);
+    const { notes, setNotes, setArchiveNotes, setDeleteNotes } = useContext(DataContext);
 
-    // Filter pinned notes
-    const pinnedNotes = notes.filter(note => note.isPinned);
+    // // Filter pinned notes
+    // const pinnedNotes = notes.filter(note => note.isPinned);
     
-    // Filter non-pinned notes
-    const otherNotes = notes.filter(note => !note.isPinned);
+    // // Filter non-pinned notes
+    // const otherNotes = notes.filter(note => !note.isPinned);
 
     const archiveNote = (note) => {
         // console.log(note.note_id)
         const updatedNotes = notes.filter(data => data.note_id !== note.note_id);
         setNotes(updatedNotes);
-        setAcrchiveNotes(prevArr => [note, ...prevArr]);
+        setArchiveNotes(prevArr => [note, ...prevArr]);
     }
 
     const deleteNote = (note) => {
@@ -40,13 +41,24 @@ const Note = ({ note }) => {
     }
 
     const togglePin = (note) => {
+        // Toggle the isPinned field
+        const updatedNote = { ...note, isPinned: !note.isPinned };
         const updatedNotes = notes.map(data => {
             if (data.note_id === note.note_id) {
-                return { ...data, isPinned: !data.isPinned };
+                return updatedNote;
             }
             return data;
         });
-        setNotes(updatedNotes);
+
+        // Update the note in the database
+        axios.put(`http://127.0.0.1:8000/Note/${note.note_id}/`, updatedNote)
+            .then(response => {
+                // Update the state with the updated note
+                setNotes(updatedNotes);
+            })
+            .catch(error => {
+                console.error('Error updating note:', error);
+            });
     }
 
 
