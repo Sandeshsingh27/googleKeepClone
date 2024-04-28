@@ -70,6 +70,11 @@ Or below command on Bash:
 env/bin/activate.bat
 ```
 
+-->Navigate to the myNotes Directory
+```
+cd myNotes
+```
+
 Then install the project dependencies with
 
 ```
