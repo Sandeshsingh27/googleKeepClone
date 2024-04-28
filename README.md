@@ -14,9 +14,6 @@
         <li>Ability to add background color to the note by taking user input.</li>
         <li>Notes are visible in four column layout on large screen sizes, two for medium screen sizes.</li>
     </ul>
-
-    <b>Note:-</b><span>In this project, django backend application is named as myNotes, frontend folder contains react code and api project of django contains Django Rest Api.</span>
-
     <br />
     <a href="https://github.com/Jauharmuhammed/notes-app-django-react"><strong>Explore the docs »</strong></a>
     <!-- <br /> -->
@@ -36,6 +33,8 @@
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 
 <br>
+
+<b>Note:-</b><span>In this project, django backend application is named as myNotes, frontend folder contains react code and api project of django contains Django Rest Api.</span>
 
 
 ## Setting up Backend API 
