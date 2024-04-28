@@ -44,7 +44,7 @@ const Form = () => {
                     }
     
                     // Update note in the database
-                    axios.put(`http://127.0.0.1:8000/Note/${newNote.note_id}/`, updatedNoteData)
+                    axios.put(`http://127.0.0.1:8000/api/Note/${newNote.note_id}/`, updatedNoteData)
                         .then(response => {
                             console.log('Note updated successfully:', response.data);
                         })

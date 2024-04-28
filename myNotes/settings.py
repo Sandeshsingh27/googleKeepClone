@@ -62,7 +62,7 @@ ROOT_URLCONF = 'myNotes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'frontend/build'],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,7 +128,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/build/static'
+    os.path.join(BASE_DIR, 'frontend/build/static')
 ]
 
 MEDIA_URL = '/media/'

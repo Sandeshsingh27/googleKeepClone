@@ -32,7 +32,7 @@ const DeleteNote = ({ deleteNote }) => {
     useEffect(() => {
         const fetchColor = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/Note/${deleteNote.note_id}`);
+                const response = await axios.get(`http://127.0.0.1:8000/api/Note/${deleteNote.note_id}`);
                 const color = response.data.bg_color;
                 setBackgroundColor(color || '#FFFFFF');
             } catch (error) {
@@ -63,7 +63,7 @@ const DeleteNote = ({ deleteNote }) => {
         };
 
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/Note/${deleteNote.note_id}/`, data);
+            const response = await axios.put(`http://127.0.0.1:8000/api/Note/${deleteNote.note_id}/`, data);
             console.log('Color updated successfully:', response.data);
             // Update the state with the new color
             const updatedNotes = trashNotes.map(data => {
@@ -84,7 +84,7 @@ const DeleteNote = ({ deleteNote }) => {
             isTrash: false  // Set isTrash to false to indicate restoring
         };
     
-        axios.put(`http://127.0.0.1:8000/Note/${deleteNote.note_id}/`, data)
+        axios.put(`http://127.0.0.1:8000/api/Note/${deleteNote.note_id}/`, data)
             .then(response => {
                 const updatedNotes = trashNotes.filter(data => data.note_id !== deleteNote.note_id);
                 setTrashNotes(updatedNotes);
@@ -96,7 +96,7 @@ const DeleteNote = ({ deleteNote }) => {
     }
 
     const removeNote = () => {
-        axios.delete(`http://127.0.0.1:8000/Note/${deleteNote.note_id}/`)
+        axios.delete(`http://127.0.0.1:8000/api/Note/${deleteNote.note_id}/`)
         .then(res => {
             const updatedNotes = trashNotes.filter(data => data.note_id !== deleteNote.note_id);
             setTrashNotes(updatedNotes);
