@@ -3,8 +3,19 @@
 <div align="center">
   <h3 align="center">Django React Notes App</h3>
 
+  <strong>Note:-</strong><p>django backend application is named as myNotes, frontend folder contains react and api project of django is Django Rest Api.</p>
+
   <p align="center">
-    A notes app using Django REST Framework and React Js styled
+    A notes app using Django REST Framework and React Js with following features:-
+    <ul>
+        <li>Creating a Note with Title and Body, where title can be optional but body content needs to be there otherwise it will show an alert pop up showing body text is necessary to be filled</li>
+        <li>Ability to Pin a note and pinned note will be visible at different section of the page.</li>
+        <li>Ability to Archive and Unarchive the note.</li>
+        <li>Ability to move the note to the trash bin.</li>
+        <li>From the trash bin either we can restore the note or can delete it permanently.</li>
+        <li>Ability to add background color to the note by taking user input.</li>
+        <li>Notes are visible in four column layout on large screen sizes, two for medium screen sizes.</li>
+    </ul>
     <br />
     <a href="https://github.com/Jauharmuhammed/notes-app-django-react"><strong>Explore the docs »</strong></a>
     <!-- <br /> -->
@@ -74,7 +85,7 @@ Create a user with manage.py
 python manage.py createsuperuser
 ```
 
-Now you can run the project with this command
+Now run the project with this command
 
 ```
 python manage.py runserver
@@ -88,6 +99,8 @@ python manage.py runserver
 ## Frontend setting up
 
 ### Frontend Instructions (Create React App) 
+
+---> Open the New terminal
 
 ---> Navigate to the `frontend/` directory
 
