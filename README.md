@@ -3,8 +3,6 @@
 <div align="center">
   <h3 align="center">Django React Notes App</h3>
 
-  <strong>Note:-</strong><p>django backend application is named as myNotes, frontend folder contains react and api project of django is Django Rest Api.</p>
-
   <p align="center">
     A notes app using Django REST Framework and React Js with following features:-
     <ul>
@@ -16,6 +14,9 @@
         <li>Ability to add background color to the note by taking user input.</li>
         <li>Notes are visible in four column layout on large screen sizes, two for medium screen sizes.</li>
     </ul>
+
+    <b>Note:-</b><span>In this project, django backend application is named as myNotes, frontend folder contains react code and api project of django contains Django Rest Api.</span>
+
     <br />
     <a href="https://github.com/Jauharmuhammed/notes-app-django-react"><strong>Explore the docs »</strong></a>
     <!-- <br /> -->
@@ -62,12 +63,12 @@ virtualenv env
 That will create a new folder `env` in your project directory. Next activate it with this command on powershell:
 
 ```
-env/bin/active
+env/bin/activate
 ```
 
 Or below command on Bash:
 ```
-env/bin/active
+env/bin/activate.bat
 ```
 
 Then install the project dependencies with
